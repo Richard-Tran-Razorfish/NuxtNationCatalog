@@ -1,75 +1,30 @@
-# Nuxt Minimal Starter
+# Projet NuxtNationCatalog
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Ce projet est basé sur Nuxt 3. L'objectif est de proposer une expérience "Catalogue + Détail" pour une plateforme e-commerce sur Nuxt.
 
-## Setup
+## Prérequis
 
-Make sure to install dependencies:
+Assurez-vous d'avoir les logiciels suivants installés :
 
-```bash
-# npm
-npm install
+- **Node.js**
+- **nvm (Node Version Manager)** pour gérer facilement les versions de Node.js : [NVM Documentation](https://github.com/nvm-sh/nvm)
 
-# pnpm
-pnpm install
+## Installation
 
-# yarn
-yarn install
+1. **Cloner le dépôt :**
 
-# bun
-bun install
-```
+   ```bash
+   git clone https://github.com/Richard-Tran-Razorfish/NuxtNationCatalog.git
+   cd NuxtNationCatalog
 
-## Development Server
+2. **Mettre la bonne version NVM :**
 
-Start the development server on `http://localhost:3000`:
+   ```bash
+   nvm use lts/krypton
+   ou
+   nvm use v24.12.0
 
-```bash
-# npm
-npm run dev
+3. **Lancer le projet :**
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+   ```bash
+   npm run dev
