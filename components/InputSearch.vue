@@ -19,8 +19,27 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 const searchTerm = ref(props.modelValue);
 
+
+// Fonction debounce
+function debounce(fn, delay) {
+  let timeoutID;
+  return function(...args) {
+    if (timeoutID) {
+      clearTimeout(timeoutID);
+    }
+    timeoutID = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}
+
+// Debounce pour l'entrée
+const debouncedEmit = debounce((value) => {
+  emit('update:modelValue', value);
+}, 300); // Délai de 300 ms
+
 const handleInput = () => {
-  emit('update:modelValue', searchTerm.value);
+  debouncedEmit(searchTerm.value);
 };
 
 </script>
