@@ -12,6 +12,7 @@
   text-3xl
   font-bold
   underline
-  text-center;
+  text-center
+  mb-4;
 }
 </style>

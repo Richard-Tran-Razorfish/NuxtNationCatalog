@@ -8,19 +8,34 @@
       <Loader />
     </div>
     <!-- Show message error -->
-    <div v-else-if="error">
-      <p>{{ error }}</p>
-      <button @click="fetchCountries">Réessayer</button>
+    <div  v-else-if="error" class="countries__contnainer-error">
+      <h2 class="countries__title-error">
+        Erreur lors du chargement:
+      </h2>
+      <p>
+        {{ error }}
+      </p>
+      <buttonCTA
+        @click="fetchCountries"
+      >
+        Réessayer
+      </buttonCTA>
     </div>
     <!-- Show result-->
     <div v-else>
-      <ul>
-        <li v-for="country in countries" :key="country.code" class="py-2">
+      <ul class="countries__list">
+        <li v-for="country in paginatedCountries" :key="country.code" class="py-2">
           <span>{{ country.name }} ({{ country.code }})</span>
           <span v-if="country.emoji"> - {{ country.emoji }}</span>
           <span> | Continent: {{ country.continent.name }}</span>
         </li>
       </ul>
+      <buttonCTA
+        v-if="isAvailableToShowMore"
+        @click="showMoreCountries"
+      >
+        Voir plus
+      </buttonCTA>
     </div>
   </div>
 </template>
@@ -41,9 +56,12 @@ interface Country {
   name: string;
 }
 
-const loading = ref<Boolean>(true);
+const loading = ref<boolean>(true);
 const error = ref<string | null>(null);
 const countries = ref<Country[]>([]);
+const itemsPerPage = ref<number>(20);
+const currentItemCount = ref<number>(0);
+
 
 const fetchCountries = async () => {
   try {
@@ -76,7 +94,7 @@ const fetchCountries = async () => {
 
     const result = await response.json();
     countries.value = result.data.countries;
-    console.log("countries", countries.value)
+    currentItemCount.value = itemsPerPage.value;
     
   } catch (err) {
     error.value = (err as Error).message || 'Une erreur s\'est produite.';
@@ -92,8 +110,39 @@ onMounted(async () => {
   fetchCountries();
 })
 
+const paginatedCountries = computed(() => {
+  // Limite l'affichage initial au nombre d'items défini par "itemsPerPage".
+  return countries.value.slice(0, currentItemCount.value);
+});
+
+const showMoreCountries = () => {
+  // On incrémente le "Afficher plus" défini par "itemsPerPage".
+  currentItemCount.value += itemsPerPage.value;
+}
+
+const isAvailableToShowMore = computed(() => {
+  // Si tous les éléments ne sont pas parcourus, le bouton "Afficher plus" reste visible.
+  return currentItemCount.value <= countries.value.length;
+})
+
 </script>
 
 <style scoped>
+.countries__contnainer-error {
+  @apply
+  flex
+  flex-col
+  gap-2;
+}
 
+.countries__title-error {
+  @apply
+  text-xl
+  text-red-800;
+}
+
+.countries__list {
+  @apply
+  mb-4;
+}
 </style>
