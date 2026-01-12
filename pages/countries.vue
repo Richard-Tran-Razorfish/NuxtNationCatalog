@@ -3,6 +3,10 @@
     <MainTitle>
       Bienvenue sur la page choix de pays
     </MainTitle>
+    <!-- Champ de recherche -->
+    <div>
+      <inputSearch v-model="searchQuery" />
+    </div>
     <!-- Loadding animation -->
     <div v-if="loading">
       <Loader />
@@ -24,7 +28,7 @@
     <!-- Show result-->
     <div v-else>
       <ul class="countries__list">
-        <li v-for="country in paginatedCountries" :key="country.code" class="py-2">
+        <li v-for="country in filteredCountries" :key="country.code" class="py-2">
           <span>{{ country.name }} ({{ country.code }})</span>
           <span v-if="country.emoji"> - {{ country.emoji }}</span>
           <span> | Continent: {{ country.continent.name }}</span>
@@ -61,6 +65,7 @@ const error = ref<string | null>(null);
 const countries = ref<Country[]>([]);
 const itemsPerPage = ref<number>(20);
 const currentItemCount = ref<number>(0);
+const searchQuery = ref<string>('');
 
 
 const fetchCountries = async () => {
@@ -110,21 +115,30 @@ onMounted(async () => {
   fetchCountries();
 })
 
-const paginatedCountries = computed(() => {
-  // Limite l'affichage initial au nombre d'items défini par "itemsPerPage".
-  return countries.value.slice(0, currentItemCount.value);
+
+// Pays filtrés par recherche
+const filteredCountries = computed(() => {
+  const query = searchQuery.value.toLowerCase();
+  console.log(query);
+  return countries.value.filter((country: { name: string; }) => 
+    country.name.toLowerCase().includes(query)
+  ).slice(0, currentItemCount.value);
+
 });
 
+// Logique pour "Voir plus"
 const showMoreCountries = () => {
-  // On incrémente le "Afficher plus" défini par "itemsPerPage".
   currentItemCount.value += itemsPerPage.value;
 }
 
+// Vérifie si on peut afficher plus
 const isAvailableToShowMore = computed(() => {
-  // Si tous les éléments ne sont pas parcourus, le bouton "Afficher plus" reste visible.
-  return currentItemCount.value <= countries.value.length;
-})
-
+  const query = searchQuery.value.toLowerCase();
+  const filteredCount = countries.value.filter((country: { name: string; }) => 
+    country.name.toLowerCase().includes(query)
+  ).length;
+  return currentItemCount.value < filteredCount;
+});
 </script>
 
 <style scoped>
