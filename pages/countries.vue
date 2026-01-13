@@ -6,6 +6,8 @@
     <!-- Champ de recherche -->
     <div>
       <inputSearch v-model="searchQuery" />
+      <!-- Filter select -->
+      <selectContinent v-model:selectedContinent="selectedContinent"/>
     </div>
     <!-- Loadding animation -->
     <div v-if="loading">
@@ -66,6 +68,7 @@ const countries = ref<Country[]>([]);
 const itemsPerPage = ref<number>(20);
 const currentItemCount = ref<number>(0);
 const searchQuery = ref<string>('');
+const selectedContinent = ref<string>('');
 
 
 const fetchCountries = async () => {
@@ -119,11 +122,14 @@ onMounted(async () => {
 // Pays filtrés par recherche
 const filteredCountries = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  console.log(query);
-  return countries.value.filter((country: { name: string; }) => 
-    country.name.toLowerCase().includes(query)
-  ).slice(0, currentItemCount.value);
-
+  const filtered = countries.value.filter((country: { name: string; continent: { code: string; }; }) => {
+    const matchesQuery = country.name.toLowerCase().includes(query);
+    const matchesContinent = selectedContinent.value
+    ? country.continent.code === selectedContinent.value
+    : true;
+    return matchesQuery && matchesContinent;
+  });
+  return filtered.slice(0, currentItemCount.value);
 });
 
 // Logique pour "Voir plus"
@@ -134,10 +140,14 @@ const showMoreCountries = () => {
 // Vérifie si on peut afficher plus
 const isAvailableToShowMore = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  const filteredCount = countries.value.filter((country: { name: string; }) => 
-    country.name.toLowerCase().includes(query)
-  ).length;
-  return currentItemCount.value < filteredCount;
+  const totalFiltered = countries.value.filter((country: { name: string; continent: { code: string; }; }) => {
+    const matchesQuery = country.name.toLowerCase().includes(query);
+    const matchesContinent = selectedContinent.value
+    ? country.continent.code === selectedContinent.value
+    : true;
+    return matchesQuery && matchesContinent;
+  }).length;
+  return currentItemCount.value < totalFiltered;
 });
 </script>
 
