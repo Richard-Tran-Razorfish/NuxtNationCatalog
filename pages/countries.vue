@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="countries">
     <MainTitle>
       Bienvenue sur la page choix de pays
     </MainTitle>
@@ -30,10 +30,16 @@
     <!-- Show result-->
     <div v-else>
       <ul class="countries__list">
-        <li v-for="country in filteredCountries" :key="country.code" class="py-2">
-          <span>{{ country.name }} ({{ country.code }})</span>
-          <span v-if="country.emoji"> - {{ country.emoji }}</span>
-          <span> | Continent: {{ country.continent.name }}</span>
+        <li
+          v-for="country in filteredCountries"
+          :key="country.code"
+          class="countries__item"
+        >
+          <NuxtLink :to="`/detailCountry/${country.code}`" class="countries__item-link">
+            <span>{{ country.name }} ({{ country.code }})</span>
+            <span v-if="country.emoji"> - {{ country.emoji }}</span>
+            <span> | Continent: {{ country.continent.name }}</span>
+          </NuxtLink>
         </li>
       </ul>
       <buttonCTA
@@ -69,7 +75,6 @@ const itemsPerPage = ref<number>(20);
 const currentItemCount = ref<number>(0);
 const searchQuery = ref<string>('');
 const selectedContinent = ref<string>('');
-
 
 const fetchCountries = async () => {
   try {
@@ -168,5 +173,17 @@ const isAvailableToShowMore = computed(() => {
 .countries__list {
   @apply
   mb-4;
+}
+
+.countries__item {
+  @apply
+  py-2
+}
+.countries__item-link {
+  @apply
+  hover:border
+  hover:border-dashed
+  hover:border-2 
+  hover:border-sky-500 
 }
 </style>

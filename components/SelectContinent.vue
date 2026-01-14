@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-row gap-2 items-baseline">
+  <div class="continent-select__main-wrapper">
     <label for="continent-select">Choix continent (filtre):</label>
     <select
       id="continent-select"
       v-model="selectedContinent"
       @change="handleSelect"
-      class="border p-2 mb-4 rounded"
+      class="continent-select__input-select"
     >
       <option value="" disabled selected>Sélectionner un continent...</option>
       <option v-for="continent in tabContinents" :key="continent.code" :value="continent.code">
@@ -66,5 +66,23 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.continent-select__main-wrapper{
+  @apply
+  flex
+  flex-col
+  gap-2
+  items-baseline
+  mb-4
+  lg:flex-row
+  lg:items-center
+}
 
+.continent-select__input-select {
+  @apply
+  border
+  p-2
+  w-full
+  rounded
+  lg:w-80
+}
 </style>

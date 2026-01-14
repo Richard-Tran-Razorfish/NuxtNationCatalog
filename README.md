@@ -27,4 +27,5 @@ Assurez-vous d'avoir les logiciels suivants installés :
 3. **Lancer le projet :**
 
    ```bash
+   npm install
    npm run dev
