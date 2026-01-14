@@ -45,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+
 interface Continent {
   code: string;
   name: string;
@@ -116,6 +118,7 @@ const fetchDetailCountry = async () => {
 }
 
 onMounted(async () => {
+  // Récupération des data country et affichage
   fetchDetailCountry();
 });
 
