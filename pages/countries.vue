@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useCountriesStore } from '~/stores/countriesStore';
 
 interface Continent {
   code: string;
@@ -109,6 +110,10 @@ const fetchCountries = async () => {
     countries.value = result.data.countries;
     currentItemCount.value = itemsPerPage.value;
     
+    //Save les data des Pays pour une utilisation dans le details country
+    const countriesStore = useCountriesStore();
+    countriesStore.setAllCountries(countries.value);
+    console.log('countriesStore', countriesStore)
   } catch (err) {
     error.value = (err as Error).message || 'Une erreur s\'est produite.';
   } finally {
@@ -116,13 +121,6 @@ const fetchCountries = async () => {
     loading.value = false;
   }
 }
-
-onMounted(async () => {
-  // Effet pratique car connexion trop rapide, donner une sensation de loadding
-  //setTimeout(fetchCountries, 2000);
-  fetchCountries();
-})
-
 
 // Pays filtrés par recherche
 const filteredCountries = computed(() => {
@@ -154,6 +152,14 @@ const isAvailableToShowMore = computed(() => {
   }).length;
   return currentItemCount.value < totalFiltered;
 });
+
+onMounted(async () => {
+  // Effet pratique car connexion trop rapide, donner une sensation de loadding
+  //setTimeout(fetchCountries, 2000);
+  fetchCountries();
+});
+
+
 </script>
 
 <style scoped>
